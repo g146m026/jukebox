@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  mosquitto:
+    image: eclipse-mosquitto
+    ports:
+      - "1883:1883"
+    volumes:
+      - ./mosquitto.conf:/mosquitto/config/mosquitto.conf
+  jukebox:
+    build: ./app
+    environment:
+      - MQTT_BROKER=mosquitto
+      - DB_PATH=app/data/jukebox.db
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mosquitto
